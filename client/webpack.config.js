@@ -16,14 +16,55 @@ module.exports = () => {
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'dist'),
+      publicPath: ""
     },
     plugins: [
-      
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        title: 'Webpack Plugin',
+      }),
+      new InjectManifest({
+        swSrc: './src/sw.js',
+        swDest: 'service-worker.js',
+      }), 
+      new WebpackPwaManifest({
+        name: 'JATE',
+        short_name: 'JATE',
+        description: 'An awesome text editor!',
+        background_color: '#ffffff',
+        crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+        start_url: "/",
+        publicPath: "./",
+        icons: [
+          {
+            src: path.resolve('./src/images/logo.png'),
+            sizes: [96, 128, 192, 256, 384, 512], // multiple sizes
+            destination: path.join('assets', 'icons'), //destination to put it in to the assests icon folder
+          },
+        ]
+      }),
     ],
 
     module: {
       rules: [
-        
+        {
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource',
+        },
+        {
+          test: /\.m?js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
+          },
+        },
       ],
     },
   };
