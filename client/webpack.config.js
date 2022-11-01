@@ -16,18 +16,20 @@ module.exports = () => {
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'dist'),
-      publicPath: ""
+      publicPath: '',
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
         title: 'Webpack Plugin',
       }),
+      //Setting up missing plugins for InjectManifest and WebpackPwaManifest
       new InjectManifest({
-        swSrc: './src/sw.js',
-        swDest: 'service-worker.js',
+        swSrc: './src-sw.js',
+        swDest: './src-sw.js',
       }), 
       new WebpackPwaManifest({
+        fingerprints: true,
         name: 'JATE',
         short_name: 'JATE',
         description: 'An awesome text editor!',
@@ -39,7 +41,8 @@ module.exports = () => {
           {
             src: path.resolve('./src/images/logo.png'),
             sizes: [96, 128, 192, 256, 384, 512], // multiple sizes
-            destination: path.join('assets', 'icons'), //destination to put it in to the assests icon folder
+            //destination to store icons into the icons folder inside the assets folder inside the dist folder
+            destination: path.join('assets', 'icons'), 
           },
         ]
       }),
@@ -49,7 +52,7 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/i,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+          use: ['style-loader', 'css-loader'],
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -62,6 +65,7 @@ module.exports = () => {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-proposal-object-rest-spread']
             },
           },
         },
