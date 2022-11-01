@@ -4,7 +4,7 @@
 This project consists in the creation and deployment of a text editor in the context of a Progressive Web App functionality. 
 
 # Technologies
-The technologies I used in this project are Webpack, IndexedDb, Node, Express, and Heroku to deploy the editor.   
+The technologies I used in this project are Webpack, IndexedDb, Babel, Node, Express, and Heroku to deploy the editor.   
 
 # GitHub repository link
 
